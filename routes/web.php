@@ -21,17 +21,64 @@ Route::get('/', function(){
   return view('welcome');
 });
 
-Route::get('top','MainController@index');
-Route::get('top/news','MainController@news');
-Route::get('top/about','MainController@about');
-Route::get('top/collection','MainController@collection');
-Route::get('top/stockist','MainController@stockist');
-Route::get('top/contact','MainController@contact');
-Route::get('top/online','MainController@online');
-Route::get('top/sitemap','MainController@sitemap');
+Route::get('/top','User\TopController@index');
+Route::get('/news','User\NewsController@index');
+Route::get('/about','User\AboutController@index');
+Route::get('/collection','User\CollectionController@index');
+Route::get('/stockist','User\StockistController@index');
+Route::get('/online','User\OnlineController@index');
+Route::get('/sitemap','User\SitemapController@index');
 
+Route::get('/contact','User\ContactController@index')->name('contact.index');
+Route::post('/contact/confirm','User\ContactController@confirm')->name('contact.confirm');
+Route::post('/contact/thanks','User\ContactController@send')->name('contact.send');
 
+Route::resource('/admin/stockist', 'StockistController');
+Route::resource('/post', 'PostController');
+
+Route::get('/admin/top','Admin\TopController@index');
+Route::post('/admin/top/upload','Admin\TopController@upload')->name('top.upload');
+Route::get('/admin/about', 'Admin\AboutController@index');
+Route::get('/admin/collection', 'Admin\CollectionController@index');
+Route::get('/admin/online', 'Admin\OnlineController@index');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+/*
+|--------------------------------------------------------------------------
+| 1) User 認証不要
+|--------------------------------------------------------------------------
+*/
+Route::get('/', function () { return redirect('/home'); });
+
+/*
+|--------------------------------------------------------------------------
+| 2) User ログイン後
+|--------------------------------------------------------------------------
+*/
+Route::group(['middleware' => 'auth:user'], function() {
+    Route::get('/home', 'HomeController@index')->name('home');
+});
+
+/*
+|--------------------------------------------------------------------------
+| 3) Admin 認証不要
+|--------------------------------------------------------------------------
+*/
+Route::group(['prefix' => 'admin'], function() {
+    Route::get('/',         function () { return redirect('/admin/home'); });
+    Route::get('login',     'Admin\LoginController@showLoginForm')->name('admin.login');
+    Route::post('login',    'Admin\LoginController@login');
+});
+
+/*
+|--------------------------------------------------------------------------
+| 4) Admin ログイン後
+|--------------------------------------------------------------------------
+*/
+Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function() {
+    Route::post('logout',   'Admin\LoginController@logout')->name('admin.logout');
+    Route::get('home',      'Admin\HomeController@index')->name('admin.home');
+});
