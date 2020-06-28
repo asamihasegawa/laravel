@@ -17,8 +17,9 @@ class CreatePostsTable extends Migration
             $table->increments('id');
 
             $table->integer('user_id');
-            $table->string('title')->nullable();
-            $table->string('message')->nullable();
+            $table->string('name')->nullable();
+            $table->string('tel')->nullable();
+            $table->string('address')->nullable();
 
             $table->timestamps();
         });

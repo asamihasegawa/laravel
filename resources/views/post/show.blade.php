@@ -13,5 +13,5 @@
         <div class="text">{{ $item->message }}</div>
     @endif
 
-    <a href="/post"><img src="{{ asset('img/edit.svg') }}" class="add" alt="topへ"></a>
+    <a href="/admin/stockist"><img src="{{ asset('img/edit.svg') }}" class="add" alt="topへ"></a>
 @endsection

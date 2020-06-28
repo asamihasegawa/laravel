@@ -33,14 +33,17 @@ Route::get('/contact','User\ContactController@index')->name('contact.index');
 Route::post('/contact/confirm','User\ContactController@confirm')->name('contact.confirm');
 Route::post('/contact/thanks','User\ContactController@send')->name('contact.send');
 
-Route::resource('/admin/stockist', 'StockistController');
-Route::resource('/post', 'PostController');
+Route::resource('/admin/stockist', 'PostController');
 
 Route::get('/admin/top','Admin\TopController@index');
 Route::post('/admin/top/upload','Admin\TopController@upload')->name('top.upload');
 Route::get('/admin/about', 'Admin\AboutController@index');
 Route::get('/admin/collection', 'Admin\CollectionController@index');
 Route::get('/admin/online', 'Admin\OnlineController@index');
+
+Route::get('/admin/top','TopController@input');
+Route::post('/admin/top','TopController@upload');
+Route::get('/admin/top','TopController@output');
 
 Auth::routes();
 

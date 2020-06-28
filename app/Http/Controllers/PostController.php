@@ -40,31 +40,32 @@ class PostController extends Controller
       $post = new Post;
      $form = $request->all();
 
-     // 最低限なバリデーション処理です。ここでは特に説明はしません。
      $rules = [
-         'user_id' => 'integer|required', // 2項目以上条件がある場合は「 | 」を挟む
+         'user_id' => 'integer|required',
          'title' => 'required',
          'message' => 'required',
      ];
      $message = [
          'user_id.integer' => 'System Error',
          'user_id.required' => 'System Error',
-         'title.required'=> 'タイトルが入力されていません',
-         'message.required'=> 'メッセージが入力されていません'
+         'name.required'=> 'nameが入力されていません',
+         'tel.required'=> 'telが入力されていません',
+         'address.required'=> 'addressが入力されていません'
      ];
      $validator = Validator::make($form, $rules, $message);
 
      if($validator->fails()){
-         return redirect('/post')
+         return redirect('/admin/stockist')
              ->withErrors($validator)
              ->withInput();
      }else{
          unset($form['_token']);
          $post->user_id = $request->user_id;
-         $post->title = $request->title;
-         $post->message = $request->message;
+         $post->name = $request->name;
+         $post->tel = $request->tel;
+         $post->address = $request->address;
          $post->save();
-         return redirect('/post');
+         return redirect('/admin/stockist');
      }
     }
 
@@ -112,6 +113,6 @@ class PostController extends Controller
     public function destroy($id)
     {
       $items = Post::find($id)->delete();
-      return redirect('/post');
+      return redirect('/admin/stockist');
     }
 }
